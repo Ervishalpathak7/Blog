@@ -1,11 +1,17 @@
+// import necessary modules 
+import type { Request, Response } from 'express';
+
+// import models
+import user from '@/models/user';
+import type { IUser } from '@/models/user';
+import refreshToken from '@/models/refreshToken';
+
+// import utilities 
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
 import logger from '@/lib/winston';
-import user from '@/models/user';
-import refreshToken from '@/models/refreshToken';
 import config from '@/config';
-import type { Request, Response } from 'express';
-import type { IUser } from '@/models/user';
 
+// Custom type for login data
 type LoginData = Pick<IUser, 'email' | 'password'>;
 
 const loginController = async (req: Request, res: Response): Promise<void> => {
