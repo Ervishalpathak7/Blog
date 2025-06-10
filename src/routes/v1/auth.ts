@@ -1,6 +1,6 @@
 // Import necessary Controllers
 import { Router } from 'express';
-import { body } from 'express-validator';
+import { body, cookie } from 'express-validator';
 import bcrypt from 'bcrypt';
 
 // import controllers
@@ -94,6 +94,16 @@ router.post(
 );
 
 // Route for refresh token
-router.post('/refresh-token', refreshTokenController);
+router.post(
+  '/refresh-token',
+  cookie('refreshToken')
+    .notEmpty()
+    .withMessage('Refresh token required')
+    .isJWT()
+    .withMessage('Invalid refresh token '),
+
+  validationErrorMiddleware,
+  refreshTokenController,
+);
 
 export default router;
