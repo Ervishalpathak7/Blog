@@ -1,9 +1,13 @@
+// Import necessary modules
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import refreshTokenModel from '@/models/refreshToken';
-import { generateAccessToken, verifyRefreshToken } from '@/lib/jwt';
-import logger from '@/lib/winston';
 import { Types } from 'mongoose';
+
+// import logger
+import logger from '@/lib/winston';
+
+// import utilities
+import { generateAccessToken, verifyRefreshToken } from '@/lib/jwt';
 
 const refreshTokenController = async (
   req: Request,
