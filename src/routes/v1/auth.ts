@@ -1,12 +1,18 @@
+// Import necessary Controllers
 import { Router } from 'express';
 import { body } from 'express-validator';
-
-// Import necessary Controllers
-import registerController from '@/controllers/v1/auth/register';
-import validationErrorMiddleware from '@/middlewares/validationError';
-import user from '@/models/user';
-import loginController from '@/controllers/v1/auth/login';
 import bcrypt from 'bcrypt';
+
+// import controllers
+import registerController from '@/controllers/v1/auth/register';
+import loginController from '@/controllers/v1/auth/login';
+import refreshTokenController from '@/controllers/v1/auth/refreshToken';
+
+// Import middlewares
+import validationErrorMiddleware from '@/middlewares/validationError';
+
+// Import models
+import user from '@/models/user';
 
 const router = Router();
 
@@ -47,11 +53,9 @@ router.post(
   registerController,
 );
 
-
-
 // Route for user login
 router.post(
-  '/login', 
+  '/login',
   body('email')
     .trim()
     .notEmpty()
@@ -66,12 +70,13 @@ router.post(
     .withMessage('Password is required')
     .isLength({ min: 8, max: 64 })
     .withMessage('Password must be between 8 and 64 characters')
-    .custom( async ( value, { req }) => {
-      const { email } = req.body as { email : string };
-      const existingUser = await user.exists({ email })
-      .select('password')
-      .lean()
-      .exec();
+    .custom(async (value, { req }) => {
+      const { email } = req.body as { email: string };
+      const existingUser = await user
+        .exists({ email })
+        .select('password')
+        .lean()
+        .exec();
 
       if (!existingUser) {
         throw new Error('Invalid email or password');
@@ -83,12 +88,12 @@ router.post(
       }
       return true;
     }),
-      
+
   validationErrorMiddleware,
-  loginController
-  );
+  loginController,
+);
 
-
-
+// Route for refresh token
+router.post('/refresh-token', refreshTokenController);
 
 export default router;
