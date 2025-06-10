@@ -18,19 +18,21 @@ const authenticationMiddleware = (
     // Extract the token from the Authorization header
     const token = req.headers.authorization;
     if (!token?.startsWith('Bearer ')) {
-      return res.status(401).json({
+      res.status(401).json({
         status: 'error',
         message: 'Unauthorized: No token provided',
       });
+      return;
     }
 
     // split the token to get the actual token string
     const accessToken = token.split(' ')[1];
     if (!accessToken) {
-      return res.status(401).json({
+      res.status(401).json({
         status: 'error',
         message: 'Unauthorized: No token provided',
       });
+      return;
     }
 
     // Verify the access token
@@ -44,25 +46,27 @@ const authenticationMiddleware = (
     logger.error(`Authentication error: ${error}`);
     // handle expired token error
     if (error instanceof TokenExpiredError) {
-      return res.status(401).json({
+      res.status(401).json({
         status: 'error',
         message:
           'Unauthorized: Token expired , request a new token with refresh token',
       });
+      return;
     }
     // handle invalid token error
     if (error instanceof JsonWebTokenError) {
-      return res.status(401).json({
+      res.status(401).json({
         status: 'error',
         message: 'Unauthorized: Invalid token',
       });
+      return;
     }
     // handle all other errors
-    return res.status(500).json({
+    res.status(500).json({
       status: 'error',
       message: error instanceof Error ? error.message : 'Internal Server Error',
     });
+    return;
   }
-  next();
 };
 export default authenticationMiddleware;
