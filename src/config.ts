@@ -15,6 +15,9 @@ const config = {
     JWT_REFRESH_TOKEN_SECRET: process.env.JWT_REFRESH_TOKEN_SECRET!,
     JWT_ACCESS_TOKEN_EXPIRATION: process.env.JWT_ACCESS_TOKEN_EXPIRATION as ms.StringValue ,
     JWT_REFRESH_TOKEN_EXPIRATION: process.env.JWT_REFRESH_TOKEN_EXPIRATION as ms.StringValue,
+    WHITELIST_EMAILS: [
+        'vishalpathak.er@gmail.com',
+    ]
 }
 
 // Export the configuration object
