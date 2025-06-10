@@ -16,12 +16,12 @@ type LoginData = Pick<IUser, 'email' | 'password'>;
 
 const loginController = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password } = req.body as LoginData;
+    const { email } = req.body as LoginData;
 
     // Check if the user exists
     const existingUser = await user
       .findOne({ email })
-      .select('_id email password role')
+      .select('_id email role')
       .lean()
       .exec();
 
