@@ -7,12 +7,14 @@ import bcrypt from 'bcrypt';
 import registerController from '@/controllers/v1/auth/register';
 import loginController from '@/controllers/v1/auth/login';
 import refreshTokenController from '@/controllers/v1/auth/refreshToken';
+import logoutController from '@/controllers/v1/auth/logout';
 
 // Import middlewares
 import validationErrorMiddleware from '@/middlewares/validationError';
 
 // Import models
 import user from '@/models/user';
+import authenticationMiddleware from '@/middlewares/authentication';
 
 const router = Router();
 
@@ -105,5 +107,11 @@ router.post(
   validationErrorMiddleware,
   refreshTokenController,
 );
+
+// Route for logout
+router.post(
+'/logout', 
+authenticationMiddleware, 
+logoutController);
 
 export default router;
